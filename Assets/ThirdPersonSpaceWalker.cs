@@ -14,8 +14,9 @@ public class ThirdPersonSpaceWalker : MonoBehaviour
     private bool grounded = true;
 
     public GameObject cameraHolder;
+    public GameObject bridgeObject;
     public float lookSpeed = 1f;
-    float rotationX = 0;
+    float rotationX = 60f;
     public float lookXLimit = 90;
 
 
@@ -65,17 +66,27 @@ public class ThirdPersonSpaceWalker : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        grounded = true;
         if (collision.gameObject.tag == "planet")
+        {          
+            transform.SetParent(null);
+        }
+        if (collision.gameObject.tag == "bridge")
         {
             grounded = true;
+            transform.SetParent(collision.transform);
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "planet")
+        if (collision.gameObject.tag == "planet" || collision.gameObject.tag == "bridge")
         {
             grounded = false;
+        }
+        if (collision.gameObject.tag == "bridge")
+        {
+            transform.SetParent(null);
         }
     }
     private void Update()
